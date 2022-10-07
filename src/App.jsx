@@ -3,7 +3,7 @@ import emailjs from '@emailjs/browser';
 
 const App = () => {
     let [email, setEmail] = useState('')
-    let randInt = Math.floor(Math.random() * (999 - 100 + 1)) + 100
+    let randInt = Math.floor(Math.random() * 900) + 100
 
     let register = () => {
         emailjs.send('gmail-react', 'template_ahlb4b3', 
