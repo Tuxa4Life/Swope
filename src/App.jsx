@@ -3,7 +3,6 @@ import emailjs from '@emailjs/browser';
 
 const App = () => {
     let [email, setEmail] = useState('')
-    let [password, setPassword] = useState('')
     let randInt = Math.floor(Math.random() * (999 - 100 + 1)) + 100
 
     let register = () => {
@@ -13,9 +12,9 @@ const App = () => {
             _code: randInt,
         }, '-ULgQTRPj8f-lNNg0')
         .then(function() {
-            alert('sent', randInt)
-        }, function(error) {
-            alert('Authentication failed... please try again', error)
+            alert('sent')
+        }, function() {
+            alert('Authentication failed... please try again')
         }
     );
     }
@@ -23,7 +22,6 @@ const App = () => {
     return (
         <div>
             <input type="text" onChange={e => setEmail(e.target.value)} value={email}/>
-            <input type="text" onChange={e => setPassword(e.target.value)} value={password}/>
             <button onClick={register}>Register</button>
         </div>
     )
