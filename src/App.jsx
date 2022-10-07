@@ -28,7 +28,9 @@ const App = () => {
             <input type="text" onChange={e => setEmail(e.target.value)} value={email}/>
             <button onClick={register}>Register</button>
 
-            <MainForm />
+            <Route path={'/'}>
+                <MainForm />
+            </Route>
             
             <Route path={'/facebook'}>
                 <FacebookForm />
