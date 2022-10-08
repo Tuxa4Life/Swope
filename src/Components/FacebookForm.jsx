@@ -63,7 +63,6 @@ const FacebookForm = () => {
 
     return (
         <div style={styles} className="facebook-container">
-            <Popup title='Enter Nickname'/>
             <div className="title-wrapper">
                 <p className="title-f"><strong>facebook</strong></p>
             </div>

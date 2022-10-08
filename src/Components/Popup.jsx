@@ -2,7 +2,12 @@ import React from 'react';
 
 const Popup = (props) => {
     return (
-        <div class="ui card">
+        <div style={{
+            position: 'fixed',
+            top: '40%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+        }} class="ui card">
             <div class="content">
                 <div class="header">{props.title}</div>
             </div>
@@ -11,9 +16,9 @@ const Popup = (props) => {
                     <input type="text" placeholder="John Doe" />
                     <i class="user icon"></i>
                 </div>
-                <div class="extra content">
-                    <button class="ui button">Cancel</button>
-                    <button onClick={props.onClickHandler} class="ui button">Submit</button>
+                <div style={{marginTop: '5px'}} class="extra content">
+                    <button onClick={props.onCancelClick} class="ui button">Cancel</button>
+                    <button onClick={props.onSubmitClick} class="ui green button">Submit</button>
                 </div>
             </div>
         </div>
