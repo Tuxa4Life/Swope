@@ -6,7 +6,7 @@
     justify-content: center;
     flex-direction: column;
     background-color: rgba(243, 243, 243, 0.352);
-    border: 1px black solid;
+    /* border: 1px black solid; */
     border-radius: 7px;
     background-color: white;
     padding-bottom: 10px;

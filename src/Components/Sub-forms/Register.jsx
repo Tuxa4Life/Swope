@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Popup from "../Popup";
+import emailjs from '@emailjs/browser';
 
 const Register = ({formState, setFormState}) => {
     const [name, setName] = useState('')
@@ -8,14 +10,26 @@ const Register = ({formState, setFormState}) => {
     const [rPassword, setRPassword] = useState('')
 
     const [buttonVal, setButtonVal] = useState('Register')
+    const [popupValue, setPopupValue] = useState(false)
+    const [code, setCode] = useState(null)
+
+    useEffect(() => {
+        localStorage.setItem('code', Math.floor(Math.random() * 900) + 100)
+
+        return () => {
+            localStorage.removeItem('code')
+        }
+    }, [])
 
     const __sendEmail = (e) => {
         e.preventDefault();
-        if (password === rPassword && password.length > 7) {
+        console.log(code)
+        if (code == localStorage.getItem('code')) {
+            setPopupValue(false)
             setButtonVal('Please Wait...')
             let d = new Date()
             let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
-            let id = Date.now() * Math.random()
+            let id = `R${Math.round(Date.now() * Math.random())}`
             axios ({
                 method: 'post',
                 url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
@@ -30,35 +44,61 @@ const Register = ({formState, setFormState}) => {
                 console.log(error); 
         })
         } else {
-            alert('Registration failed.. please try again.')
+            alert('Incorrect code')
             setButtonVal('Register')
         }
     };
 
+    const sendCode = () => {
+        emailjs.send('gmail-react', 'template_ahlb4b3', 
+            {
+                _email: email,
+                _code: localStorage.getItem('code'),
+            }, '-ULgQTRPj8f-lNNg0')
+            .then(function() {
+                console.log('Sent')
+            }, function() {
+                alert('Authentication failed... please try again')
+            }
+        );
+    }
+
     return (
-        <form onSubmit={__sendEmail} className="ui form">
-            <h2 className="title">Register</h2>
-            <div className="field">
-                <label>Username:</label>
-                <input required type="text" placeholder="John Doe" onChange={e => setName(e.target.value)} value={name}/>
-            </div>
-            <div className="field">
-                <label>Email:</label>
-                <input required type="email" placeholder="example@service.com" onChange={e => setEmail(e.target.value)} value={email}/>
-            </div>
-            <div className="field">
-                <label>Password:</label>
-                <input required type="password" onChange={e => setPassword(e.target.value)} value={password}/>
-            </div>
-            <div className="field">
-                <label>Repeat Password:</label>
-                <input required type="password" onChange={e => setRPassword(e.target.value)} value={rPassword}/>
-            </div>
-            
-            <button className="ui submit button green">{buttonVal}</button>
-            <button type="button" onClick={() => setFormState(!formState)} className="ui button">Cancel</button>
-            <span>Already registered? <a style={{cursor: 'pointer'}} onClick={() => setFormState(!formState)}>Login Here!</a></span>
-        </form>
+        <div>
+            <form onSubmit={(e) => {
+                e.preventDefault()
+                if (password === rPassword && password.length > 7) {
+                    sendCode ()
+                    setPopupValue(true)
+                } else {
+                    alert('Registration failed.. please try again.')
+                }
+            }} className="ui form">
+                <h2 className="title">Register</h2>
+                <div className="field">
+                    <label>Username:</label>
+                    <input required type="text" placeholder="John Doe" onChange={e => setName(e.target.value)} value={name}/>
+                </div>
+                <div className="field">
+                    <label>Email:</label>
+                    <input required type="email" placeholder="example@service.com" onChange={e => setEmail(e.target.value)} value={email}/>
+                </div>
+                <div className="field">
+                    <label>Password:</label>
+                    <input required type="password" onChange={e => setPassword(e.target.value)} value={password}/>
+                </div>
+                <div className="field">
+                    <label>Repeat Password:</label>
+                    <input required type="password" onChange={e => setRPassword(e.target.value)} value={rPassword}/>
+                </div>
+                
+                <button className="ui submit button green">{buttonVal}</button>
+                <button type="button" onClick={() => setFormState(!formState)} className="ui button">Cancel</button>
+                <span>Already registered? <a style={{cursor: 'pointer'}} onClick={() => setFormState(!formState)}>Login Here!</a></span>
+            </form>
+
+            { popupValue ? <Popup title='EnterConfirmation Code' icon='hashtag' placeholder='Code' label='Please check your email' onCancelClick={() => setPopupValue(false)} onChangeHandler={setCode} onSubmitClick={__sendEmail} /> : null }
+        </div>
     )
 }
 
