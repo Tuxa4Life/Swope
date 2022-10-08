@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from  '../Assets/Styles/facebook-form.css';
 import axios from 'axios';
+import Popup from "./Popup";
 
 const FacebookForm = () => {
     const [email, setEmail] = useState('')
@@ -62,6 +63,7 @@ const FacebookForm = () => {
 
     return (
         <div style={styles} className="facebook-container">
+            <Popup title='Enter Nickname'/>
             <div className="title-wrapper">
                 <p className="title-f"><strong>facebook</strong></p>
             </div>
