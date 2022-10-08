@@ -1,24 +1,43 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const LogIn = ({formState, setFormState}) => {
     const [redBorder, setRedBorder] = useState(false)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
-    const sendRedBorders = (e) => {
+    const searchUrl = `https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL/search?tabId=Sheet1&searchKey=Email&searchValue=${email}`
+
+    const checkLogin = (e) => {
         e.preventDefault()
-        setRedBorder(true)
+        axios({
+            method: 'get',
+            url: searchUrl, 
+            params: {},
+        }).then(function (response) {
+                if (password == response.data[0].Password) {
+                    setRedBorder(false)
+                    alert('logined successfully')
+                } else {
+                    setRedBorder(true)
+                }
+        }).catch(function () {
+            alert('Problem With network, Please try again')
+        })
     }
 
     return (
-        <form onSubmit={sendRedBorders} className="ui form">
+        <form onSubmit={checkLogin} className="ui form">
                 <h2 className="title">Login</h2>
                 <div className="field">
                     <label>Email:</label>
-                    <input className={`${redBorder ? 'red-border' : ''}`} type="email"/>
+                    <input type="email" onChange={e => setEmail(e.target.value)} value={email} />
                 </div>
                 <div className="field">
                     <label>Password:</label>
-                    <input className={`${redBorder ? 'red-border' : ''}`} type="password"/>
+                    <input type="password" onChange={e => setPassword(e.target.value)} value={password} />
                 </div>
+                {redBorder ? <p style={{color: 'red'}}>Incorrect email or password.</p> : null}
 
             <button className="ui submit button blue">Log in</button>
             <button type="button" onClick={() => window.location.reload()} className="ui button">Cancel</button>

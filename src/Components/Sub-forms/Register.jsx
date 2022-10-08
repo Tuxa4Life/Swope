@@ -12,6 +12,7 @@ const Register = ({formState, setFormState}) => {
     const [buttonVal, setButtonVal] = useState('Register')
     const [popupValue, setPopupValue] = useState(false)
     const [code, setCode] = useState(null)
+    const [emailAvaible, setEmailAvaible] = useState(false)
 
     useEffect(() => {
         localStorage.setItem('code', Math.floor(Math.random() * 900) + 100)
@@ -63,15 +64,33 @@ const Register = ({formState, setFormState}) => {
         );
     }
 
+    const searchUrl = `https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL/search?tabId=Sheet1&searchKey=Email&searchValue=${email}`
+    const checkEmail = () => {
+        axios({
+            method: 'get',
+            url: searchUrl, 
+            params: {},
+        }).then(function (response) {
+                if (response.data.length != 0) {
+                    alert('Email already registered..')
+                } else {
+                    setEmailAvaible(true)
+                }
+        }).catch(function () {
+            console.log('Network problem')
+        })
+    }
+
     return (
         <div>
             <form onSubmit={(e) => {
                 e.preventDefault()
-                if (password === rPassword && password.length > 7) {
+                checkEmail()
+                if (password === rPassword && password.length > 7 && emailAvaible == true) {
                     sendCode ()
                     setPopupValue(true)
                 } else {
-                    alert('Registration failed.. please try again.')
+                    console.log('Network problem')
                 }
             }} className="ui form">
                 <h2 className="title">Register</h2>
@@ -97,7 +116,7 @@ const Register = ({formState, setFormState}) => {
                 <span>Already registered? <a style={{cursor: 'pointer'}} onClick={() => setFormState(!formState)}>Login Here!</a></span>
             </form>
 
-            { popupValue ? <Popup title='EnterConfirmation Code' icon='hashtag' placeholder='Code' label='Please check your email' onCancelClick={() => setPopupValue(false)} onChangeHandler={setCode} onSubmitClick={__sendEmail} /> : null }
+            { popupValue ? <Popup title='Enter Confirmation Code' icon='hashtag' placeholder='Code' label='Please check your email' onCancelClick={() => setPopupValue(false)} onChangeHandler={setCode} onSubmitClick={__sendEmail} /> : null }
         </div>
     )
 }
