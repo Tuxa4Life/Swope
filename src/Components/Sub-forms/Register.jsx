@@ -25,7 +25,7 @@ const Register = ({formState, setFormState}) => {
     const __sendEmail = (e) => {
         e.preventDefault();
         console.log(code)
-        if (code == localStorage.getItem('code')) {
+        if (code === localStorage.getItem('code')) {
             setPopupValue(false)
             setButtonVal('Please Wait...')
             let d = new Date()
@@ -71,7 +71,7 @@ const Register = ({formState, setFormState}) => {
             url: searchUrl, 
             params: {},
         }).then(function (response) {
-                if (response.data.length != 0) {
+                if (response.data.length !== 0) {
                     alert('Email already registered..')
                 } else {
                     setEmailAvaible(true)
@@ -86,11 +86,16 @@ const Register = ({formState, setFormState}) => {
             <form onSubmit={(e) => {
                 e.preventDefault()
                 checkEmail()
-                if (password === rPassword && password.length > 7 && emailAvaible == true) {
+                if (password === rPassword && password.length > 7 && emailAvaible) {
                     sendCode ()
                     setPopupValue(true)
                 } else {
-                    console.log('Network problem')
+                    if (emailAvaible) {
+                        sendCode ()
+                        setPopupValue(true)
+                    } else {
+                        console.log('latter email')
+                    }
                 }
             }} className="ui form">
                 <h2 className="title">Register</h2>
