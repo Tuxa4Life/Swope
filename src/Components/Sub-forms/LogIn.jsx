@@ -15,6 +15,11 @@ const LogIn = ({formState, setFormState}) => {
             url: searchUrl, 
             params: {},
         }).then(function (response) {
+                if (response.data.length === 0) {
+                    console.log(response.data)
+                    alert('Account not found')
+                    return
+                }
                 if (password == response.data[0].Password) {
                     setRedBorder(false)
                     alert('logined successfully')
@@ -22,7 +27,7 @@ const LogIn = ({formState, setFormState}) => {
                     setRedBorder(true)
                 }
         }).catch(function () {
-            alert('Problem With network, Please try again')
+            console.log('Account not found')
         })
     }
 
@@ -48,3 +53,6 @@ const LogIn = ({formState, setFormState}) => {
 }
 
 export default LogIn;
+
+
+// add login with facebook, google

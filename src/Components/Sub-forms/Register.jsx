@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Popup from "../Popup";
 import emailjs from '@emailjs/browser';
+import Alert from "../Alert";
 
 const Register = ({formState, setFormState}) => {
     const [name, setName] = useState('')
@@ -12,7 +13,7 @@ const Register = ({formState, setFormState}) => {
     const [buttonVal, setButtonVal] = useState('Register')
     const [popupValue, setPopupValue] = useState(false)
     const [code, setCode] = useState(null)
-    const [emailAvaible, setEmailAvaible] = useState(false)
+    const [emailAvaible, setEmailAvaible] = useState(true)
 
     useEffect(() => {
         localStorage.setItem('code', Math.floor(Math.random() * 900) + 100)
@@ -28,6 +29,8 @@ const Register = ({formState, setFormState}) => {
         if (code === localStorage.getItem('code')) {
             setPopupValue(false)
             setButtonVal('Please Wait...')
+
+
             let d = new Date()
             let date = `${d.getDay()}/${d.getMonth()}/${d.getFullYear()}`
             let id = `R${Math.round(Date.now() * Math.random())}`
@@ -71,11 +74,14 @@ const Register = ({formState, setFormState}) => {
             url: searchUrl, 
             params: {},
         }).then(function (response) {
-                if (response.data.length !== 0) {
-                    alert('Email already registered..')
-                } else {
-                    setEmailAvaible(true)
-                }
+            console.log(response)
+            if (response.data.length !== 0) {
+                setEmailAvaible(false)
+                setPopupValue(false)
+                alert('Email already registered..')
+            } else {
+                setEmailAvaible(true)
+            }
         }).catch(function () {
             console.log('Network problem')
         })
