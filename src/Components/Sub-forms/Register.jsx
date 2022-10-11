@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Popup from "../Popup";
 import emailjs from '@emailjs/browser';
-import Alert from "../Alert";
 
 const Register = ({formState, setFormState}) => {
     const [name, setName] = useState('')
@@ -36,7 +35,7 @@ const Register = ({formState, setFormState}) => {
             let id = `R${Math.round(Date.now() * Math.random())}`
             axios ({
                 method: 'post',
-                url: 'https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL?tabId=Sheet1', 
+                url: 'https://v1.nocodeapi.com/tuxa3/google_sheets/bERXdJyFTjGsXOJm?tabId=Sheet1', // passwords txt (1, 3)
                 params: {},
                 data: [[id, name, email, password, date]]
             }).then(function (response) {

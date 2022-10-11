@@ -6,7 +6,7 @@ const LogIn = ({formState, setFormState}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const searchUrl = `https://v1.nocodeapi.com/tuxa/google_sheets/xQtvMBfFFgfpISRL/search?tabId=Sheet1&searchKey=Email&searchValue=${email}`
+    const searchUrl = `https://v1.nocodeapi.com/tuxa3/google_sheets/bERXdJyFTjGsXOJm/search?tabId=Sheet1&searchKey=Email&searchValue=${email}` // passwords txt (1, 3)
 
     const checkLogin = (e) => {
         e.preventDefault()
